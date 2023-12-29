@@ -5,16 +5,33 @@ const Problem1 = () => {
   const [data, setData] = useState([]);
   const [activeData, setActiveData] = useState([]);
   const [completedData, setCompletedData] = useState([]);
+  const [restData, setRest] = useState([]);
   const handlSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const name = form.Name.value;
     const status = form.status.value;
+    let priority;
+    if (status === "Active") {
+      priority = 1;
+    } else if (status === "Completed") {
+      priority = 2;
+    } else {
+      priority = 3;
+    }
     const formData = {
       name,
       status,
+      priority,
     };
+
     setData([formData, ...data]);
+    console.log(data);
+    if (data.length > 1) {
+      data.sort((a, b) => a.priority - b.priority);
+    }
+    console.log(data);
+    //setData([...data]);
   };
 
   const handleClick = (val) => {
@@ -35,6 +52,17 @@ const Problem1 = () => {
 
   const getCompleted = () => {
     filter(setCompletedData, "Completed");
+  };
+
+  const getAll = () => {
+    filter(setActiveData, "Active");
+    filter(setCompletedData, "Completed");
+    setRest(
+      data.filter(
+        (dat) => dat.status !== "Active" && dat.status !== "Completed"
+      )
+    );
+    setData([...activeData, ...completedData, ...restData]);
   };
 
   return (
