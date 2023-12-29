@@ -3,21 +3,38 @@ import React, { useState } from "react";
 const Problem1 = () => {
   const [show, setShow] = useState("all");
   const [data, setData] = useState([]);
-
+  const [activeData, setActiveData] = useState([]);
+  const [completedData, setCompletedData] = useState([]);
   const handlSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const name = form.Name.value;
     const status = form.status.value;
-    //console.log(name + " " + status)
     const formData = {
       name,
       status,
     };
     setData([formData, ...data]);
   };
+
   const handleClick = (val) => {
     setShow(val);
+    if (val === "active") {
+      getActive();
+    } else if (val === "completed") {
+      getCompleted();
+    }
+  };
+  const filter = (setter, query) => {
+    const filterData = data.filter((dat) => dat.status === query);
+    setter(filterData);
+  };
+  const getActive = () => {
+    filter(setActiveData, "Active");
+  };
+
+  const getCompleted = () => {
+    filter(setCompletedData, "Completed");
   };
 
   return (
@@ -91,14 +108,33 @@ const Problem1 = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((dat, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{dat.name}</td>
-                    <td>{dat.status}</td>
-                  </tr>
-                );
-              })}
+              {show === "all" &&
+                data.map((dat, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{dat.name}</td>
+                      <td>{dat.status}</td>
+                    </tr>
+                  );
+                })}
+              {show === "active" &&
+                activeData.map((dat, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{dat.name}</td>
+                      <td>{dat.status}</td>
+                    </tr>
+                  );
+                })}
+              {show === "completed" &&
+                completedData.map((dat, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{dat.name}</td>
+                      <td>{dat.status}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
