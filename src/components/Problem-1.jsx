@@ -2,7 +2,20 @@ import React, { useState } from "react";
 
 const Problem1 = () => {
   const [show, setShow] = useState("all");
+  const [data, setData] = useState([]);
 
+  const handlSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.Name.value;
+    const status = form.status.value;
+    //console.log(name + " " + status)
+    const formData = {
+      name,
+      status,
+    };
+    setData([formData, ...data]);
+  };
   const handleClick = (val) => {
     setShow(val);
   };
@@ -12,14 +25,23 @@ const Problem1 = () => {
       <div className="row justify-content-center mt-5">
         <h4 className="text-center text-uppercase mb-5">Problem-1</h4>
         <div className="col-6 ">
-          <form className="row gy-2 gx-3 align-items-center mb-4">
+          <form
+            className="row gy-2 gx-3 align-items-center mb-4"
+            onSubmit={handlSubmit}
+          >
             <div className="col-auto">
-              <input type="text" className="form-control" placeholder="Name" />
+              <input
+                type="text"
+                className="form-control"
+                name="Name"
+                placeholder="Name"
+              />
             </div>
             <div className="col-auto">
               <input
                 type="text"
                 className="form-control"
+                name="status"
                 placeholder="Status"
               />
             </div>
@@ -68,7 +90,16 @@ const Problem1 = () => {
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {data.map((dat, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{dat.name}</td>
+                    <td>{dat.status}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </div>
